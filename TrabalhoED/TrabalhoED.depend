@@ -6,3 +6,16 @@
 
 1575639972 c:\users\uem\desktop\codigosuem\trabalhoed\listasimplesalunos.h
 
+1575678587 source:c:\users\maria\onedrive\documents\github\codigosuem\trabalhoed\main.c
+	<stdio.h>
+	<stdlib.h>
+	"listaSimplesAlunos.h"
+
+1575681717 c:\users\maria\onedrive\documents\github\codigosuem\trabalhoed\listasimplesalunos.h
+
+1575681777 source:c:\users\maria\onedrive\documents\github\codigosuem\trabalhoed\listasimplesalunos.c
+	"listaSimplesAlunos.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+

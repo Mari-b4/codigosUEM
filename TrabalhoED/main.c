@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include "listaSimplesAlunos.h"
 
-int menu(){
+int menu()
+{
     int opcao;
+    printf("\n");
     printf("\nOpcoes:");
     printf("\n0. Sair.");
     printf("\n1. Inserir um aluno no inicio da lista. ");
@@ -17,15 +19,17 @@ int menu(){
     printf("\nInforme a opcao desejada: ");
     scanf("%d", &opcao);
     return opcao;
-    }
+}
 
-int main(){
+int main()
+{
     int opcao, ra;
     float n1, n2;
     char nome[50];
     Alunos *L, *aluno;
     L = criar();
-    do{
+    do
+    {
         opcao = menu();
         switch (opcao)
         {
@@ -39,7 +43,7 @@ int main(){
             scanf("%f", &n1);
             printf("\nInsira a nota 2: ");
             scanf("%f", &n2);
-            L = inserirInicio(L, nome , ra, n1, n2);
+            L = inserirInicio(L, nome, ra, n1, n2);
             break;
         case 2:
             printf("\nInsira o nome do aluno: ");
@@ -50,10 +54,10 @@ int main(){
             scanf("%f", &n1);
             printf("\nInsira a nota 2: ");
             scanf("%f", &n2);
-            L = inserirFim(L, nome , ra, n1, n2);
+            L = inserirFim(L, nome, ra, n1, n2);
             break;
         case 3:
-            printf("Aluno com a maior media: ");
+            printf("\nAluno com a maior media: ");
             aluno = buscarMaiorMedia(L);
             mostraAluno(aluno);
             break;
@@ -78,7 +82,8 @@ int main(){
             L = excluir(L, ra);
             break;
         }
-    }while(opcao != 0);
+    }
+    while(opcao != 0);
     liberar(L);
     return 0;
 }
