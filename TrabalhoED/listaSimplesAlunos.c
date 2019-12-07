@@ -30,13 +30,16 @@ float calcularMedia(float n1, float n2){
 Alunos *buscar(Alunos *L, int raBusca){
 	Alunos *achou, *aux = L;
 	achou = NULL;
-	while (aux != NULL){
-		if (aux->ra == raBusca){
-			achou = aux;
-		}
-		else{
+	if(aux == NULL){
+        return NULL;
+	}else{
+        do{
+            if (aux->ra == raBusca){
+                achou = aux;
+                break;
+            }
 			aux = aux->prox;
-		}
+        }while(aux->prox != NULL);
 	}
 	return achou;
 }
@@ -50,7 +53,7 @@ Alunos *criar(){
 Alunos *alocar(char nome[50] , int ra, float n1, float n2){
 	Alunos *novo = (Alunos *) malloc (sizeof(Alunos));
 	if(novo == NULL){
-		printf("Erro na reserva de memoria");
+		printf("\nErro na reserva de memoria");
 	}else{
     strcpy(novo->nome, nome);
 		novo->ra = ra;
@@ -63,64 +66,74 @@ Alunos *alocar(char nome[50] , int ra, float n1, float n2){
 }
 
 Alunos *inserirInicio(Alunos* L, char nome[50] , int ra, float n1, float n2){
-  Alunos *aux, *novo;
-  novo = alocar(nome, ra, n1, n2);
-  aux = L;
-  if(aux == NULL){
-  	aux = novo;
-  }else{
-    novo->prox = aux;
-    aux = novo;
-  }
+    Alunos *aux, *novo;
+    novo = alocar(nome, ra, n1, n2);
+    aux = L;
+    if(novo == NULL){
+        printf("\nO novo aluno não pode ser cadastrado");
+
+    }else{
+        if(aux == NULL){
+            aux = novo;
+            printf("Aluno cadastrado com sucesso!");
+        }else{
+            novo->prox = aux;
+            aux = novo;
+            printf("Aluno cadastrado com sucesso!");
+        }
+    }
 	return aux;
 }
 
 Alunos *inserirFim(Alunos* L, char nome[50] , int ra, float n1, float n2){
 	Alunos *aux, *novo;
 	novo = alocar(nome, ra, n1, n2);
-  aux = L;
-	if (aux == NULL){ // Confere se L ainda est� vazia
-		aux = novo;
-	}else{ // Se L n�o estiver vazia
-		while (aux->prox != NULL){ //roda a lista at� achar o �ltimo
-			aux = aux->prox;
-		}
-		aux->prox = novo;
-	}
-	return aux;
+    aux = L;
+    if(novo == NULL){
+        printf("\nO novo aluno não pode ser cadastrado");
+    }else{
+        if (aux == NULL){ // Confere se L ainda est� vazia
+            aux = novo;
+            printf("Aluno cadastrado com sucesso!");
+        }else{ // Se L n�o estiver vazia
+            while (aux->prox != NULL){ //roda a lista at� achar o �ltimo
+                aux = aux->prox;
+            }
+            aux->prox = novo;
+            printf("Aluno cadastrado com sucesso!");
+        }
+    }
+    return aux;
 }
-
-
 
 Alunos *buscarMaiorMedia(Alunos *L){
 	Alunos *maiorMedia, *aux = L;
-	maiorMedia = NULL;
+	maiorMedia->media = 0.0;
 	if(aux == NULL){
-        printf("A lista est� vazia");
+        return NULL;
 	}else{
-        while (aux != NULL){
+        while (aux->prox != NULL){
             if (aux->media > maiorMedia->media){
                 maiorMedia = aux;
-            }
-            else{
+            }else{
                 aux = aux->prox;
             }
         }
 	}
-  return maiorMedia;
+    return maiorMedia;
 }
 
 void mostraAluno(Alunos *aluno){
-  if (aluno == NULL){
-		printf("Campo vazio!");
-	}else{
-      printf("\n__________________________");
-			printf("\nNome do aluno: %s", aluno->nome);
-      printf("\nRa: %i", aluno->ra);
-      printf("\nNota 1: %.2f", aluno->nota1);
-      printf("\nNota 2: %.2f", aluno->nota2);
-      printf("\nMedia: %.2f", aluno->media);
-      printf("\n__________________________");
+    if (aluno == NULL){
+		printf("\nRegistro vazio!");
+    }else{
+        printf("\n__________________________");
+        printf("\nNome do aluno: %s", aluno->nome);
+        printf("\nRa: %i", aluno->ra);
+        printf("\nNota 1: %.2f", aluno->nota1);
+        printf("\nNota 2: %.2f", aluno->nota2);
+        printf("\nMedia: %.2f", aluno->media);
+        printf("\n__________________________");
 	}
 }
 
@@ -129,7 +142,9 @@ void alterarDados(Alunos *L, int raAlterar){
   char nome[50] ;
   float n1, n2;
   alunoPraMudar = buscar(aux, raAlterar);
-  if(alunoPraMudar!=NULL){
+  if(alunoPraMudar==NULL){
+    printf("\nAluno nao encontrado");
+  }else{
     int op = menuAtualiza();
     switch(op) {
       case 1:
@@ -153,7 +168,7 @@ void alterarDados(Alunos *L, int raAlterar){
         printf("\nPronto! A nova nota eh %f e a nova media eh %f", alunoPraMudar->nota2, alunoPraMudar->media);
         break;
       default:
-        printf("A op��o eh invalida");
+        printf("\nA opcao eh invalida");
         break;
     }
   }
@@ -163,18 +178,17 @@ void mostrar(Alunos *L){
 	Alunos *aux;
 	aux = L;
 	if (aux == NULL){
-		printf("Lista vazia!");
-	}
-	else{
+		printf("\nLista vazia!");
+	}else{
 		while (aux != NULL){
-      printf("\n__________________________");
-			printf("\nNome do aluno: %s", aux->nome);
-      printf("\nRa: %i", aux->ra);
-      printf("\nNota 1: %.2f", aux->nota1);
-      printf("\nNota 2: %.2f", aux->nota2);
-      printf("\nMedia: %.2f", aux->media);
-      printf("\n__________________________");
-      aux = aux->prox;
+            printf("\n__________________________");
+            printf("\nNome do aluno: %s", aux->nome);
+            printf("\nRa: %i", aux->ra);
+            printf("\nNota 1: %.2f", aux->nota1);
+            printf("\nNota 2: %.2f", aux->nota2);
+            printf("\nMedia: %.2f", aux->media);
+            printf("\n__________________________");
+            aux = aux->prox;
 		}
 	}
 }
@@ -226,7 +240,10 @@ void mostrarReprovados(Alunos *L){
 Alunos *excluir(Alunos *L, int ra){
  	Alunos *excluir, *aux = L;
 	excluir = buscar(aux, ra);
-	if(excluir != NULL){
+	if(excluir == NULL){
+		printf("\nAluno nao encontrado");
+	}
+	else{
 		if (aux == excluir){ 	//se for excluir o primeiro
 			aux = excluir->prox;
 		}else{
@@ -236,9 +253,7 @@ Alunos *excluir(Alunos *L, int ra){
 			aux->prox = excluir->prox;
 		}
 		free(excluir); // OU delete excluir; //(em C++)
-	}
-	else{
-		printf("\nElemento nao encontrado");
+		printf("Aluno excluido com sucesso");
 	}
 	return aux;
  }
