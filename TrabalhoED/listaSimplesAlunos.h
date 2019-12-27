@@ -1,5 +1,5 @@
-#ifndef LISTASIMPLESALUNOS_H_INCLUDED
-#define LISTASIMPLESALUNOS_H_INCLUDED
+#ifndef LISTASIMPLESALUNOS_H
+#define LISTASIMPLESALUNOS_H
 
 //tipo exportado
 typedef struct listaSimplesAlunos Alunos;
@@ -8,8 +8,8 @@ typedef struct listaSimplesAlunos Alunos;
 
 void liberar(Alunos *L);
 Alunos* criar();
-Alunos* inserirFim(Alunos *L, char nome[50] , int ra, float n1, float n2);
-Alunos* inserirInicio(Alunos *L, char nome[50] , int ra, float n1, float n2);
+Alunos* inserirFim(Alunos *L, char nome[50], int ra, float n1, float n2);
+Alunos* inserirInicio(Alunos *L, char nome[50], int ra, float n1, float n2);
 Alunos* buscarMaiorMedia(Alunos *L);
 void mostraAluno(Alunos *aluno);
 void alterarDados(Alunos *L, int raAlterar);
