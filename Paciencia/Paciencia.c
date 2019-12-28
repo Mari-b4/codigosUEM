@@ -5,41 +5,73 @@
 
 typedef struct carta{
   int valor;
-  char naipe[10];
+  int naipe; //1-copas; 2-espadas; 3-ouros; 4-paus
 }carta;
 
-typedef struct tipo_no{
+typedef struct listaParaFila{ //para trabalhar a fila
   carta carta;
-  carta *prox;
-}no;
-
-typedef struct listaSimples{
-  carta cartaAtual;
-  carta *proxCarta;
+  struct listaParaFila *proxCarta;
 }fila;
 
-typedef struct tipo_pilha{
-  carta *base;
-  carta *topo;
+typedef struct listaParaPilha{ //para trabalhar a pilha
+  carta cartaAtual;
+  struct listaParaPilha *prox;
+}no;
+
+typedef struct pilha{
+  int naipe;
+  no *base;
+  no *topo;
 }pilha;
 
-carta criaCarta(){
-  carta nova;
-  printf("Informe o valor da carta:");
-  scanf("%i", &nova->valor);
-  printf("Informe o naipe da carta:");
-  scanf("%s", nova->naipe);
-
-  return nova;
-}
-
-pilha *criar_pilha(){
+//operações elementares de pilha
+pilha *criar(int naipeDaPilha){
   pilha *pilha = (pilha*) malloc (sizeof(pilha));
   if(pilha == NULL){
     printf("\nErro na reserva de memória");
   }else{
+    pilha->naipe = naipeDaPilha;
     pilha->base = NULL;
     pilha->topo = pilha->base;
+  }
+}
+
+no *alocar(carta novaCarta){
+  no *novo = (no*) malloc (sizeof(no));
+  if(novo == NULL){
+    printf("\nErro na reserva de memória");
+  }else{
+    no->cartaAtual = novaCarta;
+    no->prox = NULL;
+  }
+}
+
+pilha *empilhar(pilha *pilha, carta novaCarta){
+  no *novo = alocar(novaCarta);
+  if(pilha_vazia(pilha)){
+    pilha->base = novo;
+    pilha->topo = novo;
+  }else{
+    pilha->topo->prox = novo;
+    pilha->topo = novo;
+  }
+}
+
+pilha *desempilhar(pilha *pilha, carta *cartaSaida){
+  *cartaSaida->valor = pilha->topo->cartaAtual->valor;
+  *cartaSaida->naipe = pilha->topo->cartaAtual->naipe;
+  no *aux = pilha->base;
+  if(aux == pilha->topo){
+    pilha->base = NULL;
+    free(pilha->topo);
+    pilha->topo = pilha->base;
+  }else{
+    while(aux->prox != pilha->topo){
+      aux = aux->prox;
+    }
+    free(pilha->topo);
+    pilha->topo = aux;
+    pilha->topo->prox = NULL;
   }
   return pilha;
 }
@@ -52,75 +84,118 @@ int pilha_vazia(pilha *pilha){
   }
 }
 
-pilha *empilhar(pilha *pilha, carta carta){
-  fila
+void *liberar(pilha *pilha){
+  pilha *excluir;
 }
 
-fila *criar_baralho(){
-  fila *baralho = NULL;
-  carta novaCarta = criaCarta();
-  baralho = enfileirar(baralho, novaCarta);
-}
+//operações elementares de fila
 
-fila alocar(carta novaCarta){
-  fila *novo = (fila *) malloc (sizeof(fila));
+fila alocar(carta carta){
+  fila *nova = (fila*) malloc (sizeof(fila));
   if(novo == NULL){
-    printf("Erro na reserva de memoria");
+    printf("\nErro na reserva de memoria");
   }else{
-    novo->valor = novaCarta;
-    novo->prox = NULL;
+    novo->carta = carta;
+    novo->proxCarta = NULL;
   }
   return novo;
 }
 
-fila enfileirar(fila *fila , carta novaCarta){ //enfileirar
+fila *enfileirar(fila *fila, carta carta){
   fila *aux, *novo;
-  novo = alocar(novaCarta);
-  aux = F;
-  if (aux == NULL){ // Confere se L ainda está vazia
-    aux = novo;
-    novo->prox = NULL;
-  }else{ // Se L não estiver vazia
-    while (aux->prox != NULL){ //roda a fila até achar o último
-      aux = aux->prox;
-    }
-    aux->prox = novo;
+  novo = alocar(carta);
+  aux = fila;
+  while(aux->prox != NULL){
+    aux = aux->prox;
   }
-  return aux;
+  aux->prox = novo;
+  return fila;
 }
 
-fila desenfileirar(fila *F){
-  fila *excluir, *aux;
-  excluir = F;
-  aux = F;
-  if(aux != NULL){
-    printf("O elemento %i foi removido!", aux->valor);
-    aux = excluir->prox;
-    free(excluir); // OU delete excluir; //(em C++)
+fila *desenfileirar(fila *fila, carta *saida){
+  fila *excluir = fila;
+  if(excluir != NULL){
+    fila = excluir->prox;
+    *saida = excluir->valor;
+    free(excluir);
+  }
+  return fila;
+}
+
+int fila_vazia(fila *fila){
+  if(fila == NULL){
+    return 1; // a fila está vazia
   }else{
-    printf("\nFila já está vazia");
+    return 0; //a fila nao está vazia
   }
-  return F;
 }
 
-void liberar(fila *F){
+void liberar(fila *fila){
 	fila *excluir;
-	while(F != NULL){
-	 	excluir = F;
-		F = F->prox;
+	while(fila != NULL){
+	 	excluir = fila;
+		fila = fila->prox;
 		free(excluir);
 	}
-	free(F);
+	free(fila);
 }
 
-void mostrar(fila *F){
-  fila *aux = F;
+//operações específicas do jogo
+carta alocar(int valor, int naipe){}
+
+fila *criar_baralho(){
+  fila *baralho = NULL;
+  carta carta;
+  int valor, naipe;
+  for(naipe=1;naipe<=4;naipe++){//define o naipe da carta
+    carta->naipe = naipe;
+    for(valor=1;valor<=13;valor++){
+        carta->valor = valor;
+    }
+    baralho = enfileirar(baralho, carta);
+  }
+  return baralho;
+}
+
+pilha *criar_pilha(){
+  int naipePilha;
+  pilha *pilha = criar(naipePilha);
+
+}
+
+void mostrarNaipe(carta carta){
+  switch(carta->naipe){
+    case 1:
+      printf("Copas");
+      break;
+    case 2:
+      printf("Espadas");
+      break;
+    case 3:
+      printf("Ouros");
+      break;
+    case 4:
+      printf("Paus");
+      break;
+  }
+}
+
+void *exibir_fila(fila *fila){
+  fila *aux = fila;
   if (aux == NULL){
-    printf("Fila vazia!");
+    printf("Baralho vazio!");
   }else{
     while (aux != NULL){
-      printf("\nValor: %i", aux->valor);
+      printf("\nValor da carta: %i", aux->valor);
+      printf("\nNaipe da carta: ");
+      mostrarNaipe();
       aux = aux->prox;
     }
   }
 }
+
+void *exibir_pilha(pilha *pilha){}
+
+fila *embaralhar(fila *fila){}
+
+int movimento_valido(carta *carta, pilha *pilha){}
